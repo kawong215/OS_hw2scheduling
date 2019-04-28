@@ -3,10 +3,9 @@
 #include <string>
 using namespace std;
 
-int num_jobs;
 const int columns = 3;
 
-void fifo(int job[][columns], int num_rows);
+void fifo(int job[][columns], int num_rows); // fifo scheduling
 
 int main()
 {
@@ -17,14 +16,14 @@ int main()
 	
 	int row_count = 0;
 	int column_count = 0;
+	string algorithm;
 
 	ifstream inFile;
-	
 	inFile.open("jobs.dat"); // read file
 
 	if (!inFile)
 	{
-		cout << "Cannot open file";
+		cout << "Cannot open file" << endl;
 	}
 
 	while (inFile >> readline1 >> readline2 >> readline3)
@@ -41,15 +40,59 @@ int main()
 		row_count++;
 	}
 
-	// print contents
+	cout << "Contents of file: " << endl; 
+	
+	// print contents of jobs.dat
 	for (int i = 0; i < row_count; i++)
+    {
+    	for (int j = 0; j < columns; j++)
     	{
-    		for (int j = 0; j < columns; j++)
-    		{
-    			cout << jobs[i][j] << " ";
-    		}
-    		cout << endl;
+    		cout << jobs[i][j] << " ";
     	}
+    	cout << endl;
+    }
 
-	cout << endl; 
+	// row count display for checking purposes
+	cout << endl << "Number of jobs = " << row_count << endl << endl; 
+	
+	// select scheduling algorithm to perform
+	cout << "Select scheduling algorithm (FIFO, SJF, BJF, STCF, RR): " << endl << "(in all CAPs or all lowercase)" << endl;
+	getline(cin, algorithm); 
+
+	if (algorithm == "FIFO" || algorithm == "fifo")
+	{
+		fifo(jobs, row_count);
+	}
+
+	cout << endl;
+}
+
+void fifo(int job[][columns], int num_rows)
+{	
+	int start_time; 
+	int finish_time; 
+	int completion_time; 
+	int response_time; 
+	float avg = 0;
+
+	completion_time = job[0][2];
+	start_time = job[0][1];
+
+	for (int i = 0; i < num_rows; i++)
+	{
+		finish_time = start_time + job[i][2];
+		response_time = start_time + job[i][2] - job[i][1];
+		
+		cout << "Start time of job ID " << job[i][0] << ": " << start_time << " sec" << endl;
+		cout << "Finish time of job ID " << job[i][0] << ": " << finish_time << " sec" << endl;
+		cout << "Total time elapse of job ID " << job[i][0] << ": " << finish_time - job[i][1] << " sec" << endl; // finish time - time arrived
+
+		cout << "Response time of job ID " << job[i][0] << ": " << response_time << " sec" << endl << endl; // turnaround time
+		
+		start_time += job[i][2];
+		avg += response_time; 
+	}
+
+	// for checking purposes
+	cout << "Avg turnaround: " << avg / num_rows << endl; 
 }
