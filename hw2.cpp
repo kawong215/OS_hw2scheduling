@@ -5,18 +5,22 @@ using namespace std;
 
 const int columns = 3;
 
-void fifo(int job[][columns], int num_rows); // fifo scheduling
+void fifo(int job[][columns], int num_rows); // FIFO scheduling
+void sjf(int job[][columns], int num_rows); // SJF scheduling
+void bjf(int job[][columns], int num_rows); // BJF scheduling
+void stcf(int job[][columns], int num_rows); // STCF scheduling
+void rr(int job[][columns], int num_rows); // RR scheduling
 
 int main()
 {
 	int readline1, readline2, readline3;
 	int rows = 100;
 
-	int jobs[rows][columns]; 
+	int jobs[rows][columns]; // holds jobs.dat data
 	
 	int row_count = 0;
 	int column_count = 0;
-	string algorithm;
+	int algorithm;
 
 	ifstream inFile;
 	inFile.open("jobs.dat"); // read file
@@ -28,7 +32,7 @@ int main()
 
 	while (inFile >> readline1 >> readline2 >> readline3)
 	{
-		column_count = 0;
+		column_count = 0; // restart column count
 		
 		jobs[row_count][column_count] = readline1;
 		column_count++;
@@ -44,28 +48,40 @@ int main()
 	
 	// print contents of jobs.dat
 	for (int i = 0; i < row_count; i++)
-    {
-    	for (int j = 0; j < columns; j++)
     	{
-    		cout << jobs[i][j] << " ";
+    		for (int j = 0; j < columns; j++)
+    		{
+    			cout << jobs[i][j] << " ";
+    		}
+    		cout << endl;
     	}
-    	cout << endl;
-    }
 
 	// row count display for checking purposes
 	cout << endl << "Number of jobs = " << row_count << endl << endl; 
 	
 	// select scheduling algorithm to perform
-	cout << "Select scheduling algorithm (FIFO, SJF, BJF, STCF, RR): " << endl << "(in all CAPs or all lowercase)" << endl;
-	getline(cin, algorithm); 
+	cout << "Select scheduling algorithm. Please type the number corresponding to the algorithm." << endl;
+	cout << "1: FIFO" << endl << "2: SJF" << endl << "3: BJF " << endl << "4: STCF " << endl << "5: RR" << endl;
+	cin >> algorithm; 
 
-	if (algorithm == "FIFO" || algorithm == "fifo")
+	// if input is not one of the case statements
+	while (algorithm < 1 || algorithm > 5) 
 	{
-		fifo(jobs, row_count);
+		cout << "Please choose an algorithm: " << endl;
+		cin.clear();
+		cin >> algorithm; 
 	}
-
-	cout << endl;
+	
+	switch (algorithm)
+	{
+		case 1: fifo(jobs, row_count);
+		case 2: sjf(jobs, row_count);
+		case 3: bjf(jobs, row_count);
+		case 4: stcf(jobs, row_count);
+		case 5: rr(jobs, row_count);
+	}	
 }
+
 
 void fifo(int job[][columns], int num_rows)
 {	
@@ -81,7 +97,7 @@ void fifo(int job[][columns], int num_rows)
 	for (int i = 0; i < num_rows; i++)
 	{
 		finish_time = start_time + job[i][2];
-		response_time = start_time + job[i][2] - job[i][1];
+		response_time = start_time + job[i][2] - job[i][1]; // start_time + duration - arrival_time
 		
 		cout << "Start time of job ID " << job[i][0] << ": " << start_time << " sec" << endl;
 		cout << "Finish time of job ID " << job[i][0] << ": " << finish_time << " sec" << endl;
@@ -95,4 +111,25 @@ void fifo(int job[][columns], int num_rows)
 
 	// for checking purposes
 	cout << "Avg turnaround: " << avg / num_rows << endl; 
+}
+
+
+void sjf(int job[][columns], int num_rows)
+{
+
+} 
+
+void bjf(int job[][columns], int num_rows)
+{
+
+}
+
+void stcf(int job[][columns], int num_rows)
+{
+
+}
+
+void rr(int job[][columns], int num_rows)
+{
+
 }
