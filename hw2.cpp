@@ -86,18 +86,19 @@ void fifo(int job[][columns], int num_rows)
 		finish_time = start_time + job[i][2];
 		total_time = start_time + job[i][2] - job[i][1]; // start_time + duration - arrival_time
 		
-		cout << "Start time of job ID " << job[i][0] << ": " << start_time << " sec" << endl;
-		cout << "Finish time of job ID " << job[i][0] << ": " << finish_time << " sec" << endl;
-		cout << "Response time of job ID " << job[i][0] << ": " << start_time - job[i][1] << " sec" << endl; // response = start - time arrived
+		cout << "JOB ID: " << job[i][0] << endl; 
+		cout << "Start time: " << start_time << " sec" << endl;
+		cout << "Finish time: " << finish_time << " sec" << endl;
+		cout << "Total time (turnaround) elapsed: " << total_time << " sec" << endl; // turnaround time
+		cout << "Response time: " << start_time - job[i][1] << " sec" << endl; // response = start - time arrived
+		cout << endl;
 
-		cout << "Total time elapsed of job ID " << job[i][0] << ": " << total_time << " sec" << endl << endl; // turnaround time
-		
 		start_time += job[i][2];
 		avg += total_time; 
 	}
 
 	// for checking purposes
-	cout << "Avg turnaround: " << avg / num_rows << endl; 
+	cout << "Avg turnaround: " << avg / num_rows << " sec" << endl; 
 }
 
 
@@ -177,6 +178,68 @@ void sjf(int job[][columns], int num_rows)
 		}
 		cout << endl;
 	}
+
+	// sort the jobs with the same arrival time
+	for (int i = 0; i < match; i++)
+	{
+		min = i;
+
+		for (int j = i + 1; j < match; j++)
+		{
+			if (dupe_arrivals[j][2] < dupe_arrivals[min][2])
+			{
+				min = j;
+			}
+		}
+		temp = dupe_arrivals[min][2];
+		dupe_arrivals[min][2] = dupe_arrivals[i][2];
+		dupe_arrivals[i][2] = temp;
+
+		temp = dupe_arrivals[min][0];
+		dupe_arrivals[min][0] = dupe_arrivals[i][0];
+		dupe_arrivals[i][0] = temp;
+
+		temp = dupe_arrivals[min][1];
+		dupe_arrivals[min][1] = dupe_arrivals[i][1];
+		dupe_arrivals[i][1] = temp;
+	}
+
+
+	// for checking purposes
+	cout << "After sorting duplicates, duplicate array: " << endl; 
+	for (int i = 0; i < match; i++)
+	{
+		for (int j = 0; j < columns; j++)
+		{
+			cout << dupe_arrivals[i][j] << " ";
+		}
+		cout << endl;
+	}
+
+	// for checking purposes
+	for (int m = 0; m < match; m++)
+	{
+		for (int n = 0; n < columns; n++)
+		{
+    		job[duplicate_start+m][n] = dupe_arrivals[m][n]; 
+		}
+	}
+
+	cout << endl << "Sorted jobs.dat file: " << endl; 
+
+	// print contents of jobs.dat
+	for (int i = 0; i < num_rows; i++)
+	{
+		for (int j = 0; j < columns; j++)
+		{
+			cout << job[i][j] << " ";
+		}
+		cout << endl;
+	}
+
+	cout << endl; 
+	
+	fifo(job, num_rows); 
 
 } 
 
