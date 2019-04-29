@@ -11,6 +11,8 @@ void bjf(int job[][columns], int num_rows); // BJF scheduling
 void stcf(int job[][columns], int num_rows); // STCF scheduling
 void rr(int job[][columns], int num_rows); // RR scheduling
 
+void algorithm_check(string choice, int job[][columns], int num_rows);
+
 int main()
 {
 	int readline1, readline2, readline3;
@@ -20,7 +22,7 @@ int main()
 	
 	int row_count = 0;
 	int column_count = 0;
-	int algorithm;
+	string algorithm;
 
 	ifstream inFile;
 	inFile.open("jobs.dat"); // read file
@@ -60,26 +62,11 @@ int main()
 	cout << endl << "Number of jobs = " << row_count << endl << endl; 
 	
 	// select scheduling algorithm to perform
-	cout << "Select scheduling algorithm. Please type the number corresponding to the algorithm." << endl;
+	cout << "Select scheduling algorithm. Type algorithm in all CAPS or lowercase." << endl;
 	cout << "1: FIFO" << endl << "2: SJF" << endl << "3: BJF " << endl << "4: STCF " << endl << "5: RR" << endl;
-	cin >> algorithm; 
+	getline(cin, algorithm); 
 
-	// if input is not one of the case statements
-	while (algorithm < 1 || algorithm > 5) 
-	{
-		cout << "Please choose an algorithm: " << endl;
-		cin.clear();
-		cin >> algorithm; 
-	}
-	
-	switch (algorithm)
-	{
-		case 1: fifo(jobs, row_count);
-		case 2: sjf(jobs, row_count);
-		case 3: bjf(jobs, row_count);
-		case 4: stcf(jobs, row_count);
-		case 5: rr(jobs, row_count);
-	}	
+	algorithm_check(algorithm, jobs, row_count);
 }
 
 
@@ -206,4 +193,40 @@ void stcf(int job[][columns], int num_rows)
 void rr(int job[][columns], int num_rows)
 {
 
+}
+
+void algorithm_check(string choice, int job[][columns], int num_rows)
+{
+	string algorithm = choice; 
+
+	while (!(algorithm == "FIFO" || algorithm == "fifo" || algorithm == "SJF" || algorithm == "sjf" || algorithm == "BJF" || algorithm == "bjf" || algorithm == "STCF" || algorithm == "stcf" || algorithm == "RR" || algorithm == "rr"))
+	{
+		cout << "Please enter an algorithm choice" << endl;
+		getline(cin, algorithm); 
+	}
+
+	if (algorithm == "FIFO" || algorithm == "fifo")
+	{
+		fifo(job, num_rows);
+	}
+		
+	else if (algorithm == "SJF" || algorithm == "sjf")
+	{
+		sjf(job, num_rows);
+	}
+
+	else if (algorithm == "BJF" || algorithm == "bjf")
+	{
+		bjf(job, num_rows);
+	}
+	
+	else if (algorithm == "STCF" || algorithm == "stcf")
+	{
+		stcf(job, num_rows);
+	}
+	
+	else if (algorithm == "RR" || algorithm == "rr")
+	{
+		rr(job, num_rows);
+	}	
 }
