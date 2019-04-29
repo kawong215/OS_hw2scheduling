@@ -75,7 +75,7 @@ void fifo(int job[][columns], int num_rows)
 	int start_time; 
 	int finish_time; 
 	int completion_time; 
-	int response_time; 
+	int total_time; 
 	float avg = 0;
 
 	completion_time = job[0][2];
@@ -84,16 +84,16 @@ void fifo(int job[][columns], int num_rows)
 	for (int i = 0; i < num_rows; i++)
 	{
 		finish_time = start_time + job[i][2];
-		response_time = start_time + job[i][2] - job[i][1]; // start_time + duration - arrival_time
+		total_time = start_time + job[i][2] - job[i][1]; // start_time + duration - arrival_time
 		
 		cout << "Start time of job ID " << job[i][0] << ": " << start_time << " sec" << endl;
 		cout << "Finish time of job ID " << job[i][0] << ": " << finish_time << " sec" << endl;
-		cout << "Total time elapse of job ID " << job[i][0] << ": " << finish_time - job[i][1] << " sec" << endl; // finish time - time arrived
+		cout << "Response time of job ID " << job[i][0] << ": " << start_time - job[i][1] << " sec" << endl; // response = start - time arrived
 
-		cout << "Response time of job ID " << job[i][0] << ": " << response_time << " sec" << endl << endl; // turnaround time
+		cout << "Total time elapsed of job ID " << job[i][0] << ": " << total_time << " sec" << endl << endl; // turnaround time
 		
 		start_time += job[i][2];
-		avg += response_time; 
+		avg += total_time; 
 	}
 
 	// for checking purposes
