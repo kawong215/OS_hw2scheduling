@@ -116,6 +116,80 @@ void fifo(int job[][columns], int num_rows)
 
 void sjf(int job[][columns], int num_rows)
 {
+	int arrivals[num_rows];
+	int next = 0;
+	int next_count = 0; 
+	int match = 1; 
+	int location[num_rows];
+
+	int time = 0; 
+	int count = 0; 
+	int index = 0;
+
+	int temp, min;
+
+	// find matching arrivals
+	for (int i = 0; i < num_rows; i++)
+	{
+		arrivals[i] = job[i][1];
+		next = i + 1;
+		next_count = count + 1; 
+		
+		if (arrivals[i] == job[next][1])
+		{
+			match++; 
+			location[count] = job[i][0]; 
+			location[next_count] = job[next][0]; 
+			time = arrivals[i]; 
+			index = next; 
+			
+			// for checking purposes
+			cout << "matching arrivals for job ID " << job[i][0] << " and " << job[next][0] << " at time: " << time << endl;
+			count++; 
+		}
+	}
+	
+	cout << endl; 
+
+	// non-duplicated arrival jobs
+	int non_dupes = num_rows - match; 
+
+	// index where duplicated arrivals start
+	int duplicate_start = index - match + 1; 
+
+	// for checking purposes
+	cout << "Number of non-duplicates: " << non_dupes << endl;
+	cout << "Number of matches: " << match << endl;
+	cout << "Duplicate arrivals begin at row: " << duplicate_start << endl; 
+	cout << "Last index of match: " << index << endl;
+
+	// for checking purposes
+	cout << "Location of matches: " << endl;
+	for (int n = 0; n < match; n++)
+	{
+		cout << location[n] << " ";
+	}
+
+	int dupe_arrivals[match][columns]; // array to hold duplicate jobs at the same arrival
+
+	for (int m = 0; m < match; m++)
+	{
+		for (int n = 0; n < columns; n++)
+		{
+			dupe_arrivals[m][n] = job[duplicate_start + m][n]; 
+		}
+	}
+
+	cout << endl << "jobs with matching arrivals: " << endl; 
+	// print contents of jobs.dat
+	for (int x = 0; x < match; x++)
+	{
+		for (int y = 0; y < columns; y++)
+		{
+			cout << dupe_arrivals[x][y] << " ";
+		}
+		cout << endl;
+	}
 
 } 
 
