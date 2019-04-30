@@ -11,8 +11,9 @@ void bjf(int job[][columns], int num_rows); // BJF scheduling
 void stcf(int job[][columns], int num_rows); // STCF scheduling
 void rr(int job[][columns], int num_rows); // RR scheduling
 
-void algorithm_check(string choice, int job[][columns], int num_rows);
+void algorithm_check(string choice, int job[][columns], int num_rows); 
 void print_array(int arr[][columns], int num_rows); 
+
 
 int main()
 {
@@ -120,31 +121,19 @@ void sjf(int job[][columns], int num_rows)
 			index = next; 
 			
 			// for checking purposes
-			cout << "matching arrivals for job ID " << job[i][0] << " and " << job[next][0] << " at time: " << arrivals[i] << endl;
+			//cout << "matching arrivals for job ID " << job[i][0] << " and " << job[next][0] << " at time: " << arrivals[i] << endl;
 			count++; 
 		}
 	}
-	
-	cout << endl; 
 
-	// non-duplicated arrival jobs
-	int non_dupes = num_rows - match; 
+	int non_dupes = num_rows - match;  // non-duplicated arrival jobs
+	int duplicate_start = index - match + 1; // index where duplicated arrivals start
 
-	// index where duplicated arrivals start
-	int duplicate_start = index - match + 1; 
-
-	// for checking purposes
-	cout << "Number of non-duplicates: " << non_dupes << endl;
-	cout << "Number of matches: " << match << endl;
-	cout << "Duplicate arrivals begin at row: " << duplicate_start << endl; 
-	cout << "Last index of match: " << index << endl;
-
-	// for checking purposes
-	cout << "Location of matches: " << endl;
-	for (int n = 0; n < match; n++)
-	{
-		cout << location[n] << " ";
-	}
+	// for checking purposes to see indexes of matching arrivals and non-matching
+	//cout << "Number of non-duplicates: " << non_dupes << endl;
+	//cout << "Number of matches: " << match << endl;
+	//cout << "Duplicate arrivals begin at row: " << duplicate_start << endl; 
+	//cout << "Last index of match: " << index << endl;
 
 	int dupe_arrivals[match][columns]; // array to hold duplicate jobs at the same arrival
 
@@ -156,12 +145,12 @@ void sjf(int job[][columns], int num_rows)
 		}
 	}
 
+	// checking purposes -- print contents of jobs.dat
 	cout << endl << "jobs with matching arrivals: " << endl; 
-	// print contents of jobs.dat
 	print_array(dupe_arrivals, match); 
 	cout << endl; 
 
-	// sort the jobs with the same arrival time
+	// sort the jobs with the same arrival time from smallest to largest
 	for (int i = 0; i < match; i++)
 	{
 		min = i;
@@ -186,17 +175,16 @@ void sjf(int job[][columns], int num_rows)
 		dupe_arrivals[i][1] = temp;
 	}
 
-
 	// for checking purposes
 	cout << "After sorting duplicates, duplicate array: " << endl; 
 	print_array(dupe_arrivals, match); 
 
-	// for checking purposes
+	// copy duplicate array into jobs.dat array
 	for (int m = 0; m < match; m++)
 	{
 		for (int n = 0; n < columns; n++)
 		{
-    		job[duplicate_start+m][n] = dupe_arrivals[m][n]; 
+    			job[duplicate_start+m][n] = dupe_arrivals[m][n]; 
 		}
 	}
 
@@ -236,12 +224,10 @@ void bjf(int job[][columns], int num_rows)
 			index = next; 
 			
 			// for checking purposes
-			cout << "matching arrivals for job ID " << job[i][0] << " and " << job[next][0] << " at time: " << arrivals[i] << endl;
+			//cout << "matching arrivals for job ID " << job[i][0] << " and " << job[next][0] << " at time: " << arrivals[i] << endl;
 			count++; 
 		}
 	}
-	
-	cout << endl; 
 	
 	// non-duplicated arrival jobs
 	int non_dupes = num_rows - match; 
@@ -249,18 +235,11 @@ void bjf(int job[][columns], int num_rows)
 	// index where duplicated arrivals start
 	int duplicate_start = index - match + 1; 
 
-	// for checking purposes
-	cout << "Number of non-duplicates: " << non_dupes << endl;
-	cout << "Number of matches: " << match << endl;
-	cout << "Duplicate arrivals begin at row: " << duplicate_start << endl; 
-	cout << "Last index of match: " << index << endl;
-
-	// for checking purposes
-	cout << "Location of matches: " << endl;
-	for (int n = 0; n < match; n++)
-	{
-		cout << location[n] << " ";
-	}
+	// for checking purposes to see indexes of matching arrivals and non-matching
+	//cout << "Number of non-duplicates: " << non_dupes << endl;
+	//cout << "Number of matches: " << match << endl;
+	//cout << "Duplicate arrivals begin at row: " << duplicate_start << endl; 
+	//cout << "Last index of match: " << index << endl;
 
 	int dupe_arrivals[match][columns]; // array to hold duplicate jobs at the same arrival
 
@@ -276,7 +255,7 @@ void bjf(int job[][columns], int num_rows)
 	// print jobs with same arrival time
 	print_array(dupe_arrivals, match); 
 
-	// sort the jobs with the same arrival time
+	// sort the jobs with the same arrival time from largest to smallest
 	for (int i = 0; i < match; i++)
 	{
 		max = i;
@@ -303,7 +282,7 @@ void bjf(int job[][columns], int num_rows)
 
 
 	// for checking purposes
-	cout << "After sorting duplicates, duplicate array: " << endl; 
+	cout << endl << "After sorting duplicates, duplicate array: " << endl; 
 	print_array(dupe_arrivals, match); 
 
 	// for checking purposes
