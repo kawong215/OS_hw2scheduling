@@ -12,6 +12,7 @@ void stcf(int job[][columns], int num_rows); // STCF scheduling
 void rr(int job[][columns], int num_rows); // RR scheduling
 
 void algorithm_check(string choice, int job[][columns], int num_rows);
+void print_array(int arr[][columns], int num_rows); 
 
 int main()
 {
@@ -49,14 +50,7 @@ int main()
 	cout << "Contents of file: " << endl; 
 	
 	// print contents of jobs.dat
-	for (int i = 0; i < row_count; i++)
-    	{
-    		for (int j = 0; j < columns; j++)
-    		{
-    			cout << jobs[i][j] << " ";
-    		}
-    		cout << endl;
-    	}
+	print_array(jobs, row_count); 
 
 	// row count display for checking purposes
 	cout << endl << "Number of jobs = " << row_count << endl << endl; 
@@ -170,14 +164,8 @@ void sjf(int job[][columns], int num_rows)
 
 	cout << endl << "jobs with matching arrivals: " << endl; 
 	// print contents of jobs.dat
-	for (int x = 0; x < match; x++)
-	{
-		for (int y = 0; y < columns; y++)
-		{
-			cout << dupe_arrivals[x][y] << " ";
-		}
-		cout << endl;
-	}
+	print_array(dupe_arrivals, match); 
+	cout << endl; 
 
 	// sort the jobs with the same arrival time
 	for (int i = 0; i < match; i++)
@@ -207,14 +195,7 @@ void sjf(int job[][columns], int num_rows)
 
 	// for checking purposes
 	cout << "After sorting duplicates, duplicate array: " << endl; 
-	for (int i = 0; i < match; i++)
-	{
-		for (int j = 0; j < columns; j++)
-		{
-			cout << dupe_arrivals[i][j] << " ";
-		}
-		cout << endl;
-	}
+	print_array(dupe_arrivals, match); 
 
 	// for checking purposes
 	for (int m = 0; m < match; m++)
@@ -226,16 +207,7 @@ void sjf(int job[][columns], int num_rows)
 	}
 
 	cout << endl << "Sorted jobs.dat file: " << endl; 
-
-	// print contents of jobs.dat
-	for (int i = 0; i < num_rows; i++)
-	{
-		for (int j = 0; j < columns; j++)
-		{
-			cout << job[i][j] << " ";
-		}
-		cout << endl;
-	}
+	print_array(job, num_rows); 
 
 	cout << endl; 
 	
@@ -292,4 +264,18 @@ void algorithm_check(string choice, int job[][columns], int num_rows)
 	{
 		rr(job, num_rows);
 	}	
+}
+
+
+void print_array(int arr[][columns], int num_rows)
+{
+	// print contents of jobs.dat
+	for (int i = 0; i < num_rows; i++)
+    	{
+    		for (int j = 0; j < columns; j++)
+    		{
+    			cout << arr[i][j] << " ";
+    		}
+    		cout << endl;
+    	}
 }
