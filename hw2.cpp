@@ -303,7 +303,32 @@ void bjf(int job[][columns], int num_rows)
 
 void stcf(int job[][columns], int num_rows)
 {
+	int remaining_time[num_rows];
+	int burst_time[num_rows];
+	int arrival_time[num_rows];
+	int completion_time;
+	int waiting_time;
 
+	int proc_time = 0;
+	
+	for (int i = 0; i < num_rows; i++)
+	{
+		arrival_time[i] = job[i][1];
+
+		cout << "AT: " << arrival_time[i] << endl;
+
+		//burst time(duration) = remaining time
+		//find total proccess time
+		burst_time[i] = job[i][2];
+		remaining_time[i] = burst_time[i];
+		
+		cout << remaining_time[i] << " " << burst_time[i] << endl;
+
+		proc_time = proc_time + burst_time[i];
+
+		cout << "Proccess " << i << ": " << proc_time << endl;
+
+	}
 }
 
 void rr(int job[][columns], int num_rows)
