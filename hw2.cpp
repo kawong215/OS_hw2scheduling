@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream> // to read files
 #include <string>
+#include <climits> //to set max in STCF
 using namespace std;
 
 const int columns = 3;
@@ -306,28 +307,87 @@ void stcf(int job[][columns], int num_rows)
 	int remaining_time[num_rows];
 	int burst_time[num_rows];
 	int arrival_time[num_rows];
+	int waiting_time[num_rows];
 	int completion_time;
-	int waiting_time;
-
-	int proc_time = 0;
+	int finish_time[num_rows];
+	int smallest;
+	int min_time = INT_MAX;
+	int time;
+	bool check = false;
+	int start_time[num_rows];
+	int tat[num_rows];
+	int rt[num_rows];
 	
 	for (int i = 0; i < num_rows; i++)
 	{
 		arrival_time[i] = job[i][1];
-
-		cout << "AT: " << arrival_time[i] << endl;
-
 		//burst time(duration) = remaining time
 		//find total proccess time
 		burst_time[i] = job[i][2];
 		remaining_time[i] = burst_time[i];
+	}
+
+	while (completion_time != num_rows)
+	{
 		
-		cout << remaining_time[i] << " " << burst_time[i] << endl;
+		for (int j = 0; j < num_rows; j++)
+		{
+			arrival_time[j] = job[j][1];
+			if((arrival_time[j] <= time) && (remaining_time[j] < min_time) && remaining_time[j] > 0)
+			{
+				min_time = remaining_time[j];
+				smallest = j;
+				check = true;
+			}
+		}
 
-		proc_time = proc_time + burst_time[i];
+		if(check == false)
+		{
+			time++;
+			continue;
+		}
 
-		cout << "Proccess " << i << ": " << proc_time << endl;
+		remaining_time[smallest]--;
 
+		min_time = remaining_time[smallest];
+		if(min_time == 0)
+		{
+			min_time = INT_MAX;
+		}
+
+		if(remaining_time[smallest] == 0)
+		{
+			completion_time++;
+
+			finish_time[smallest] = time + 1;
+
+			waiting_time[smallest] = finish_time[smallest] - burst_time[smallest] - arrival_time[smallest];
+
+			if (waiting_time[smallest] < 0)
+			{
+				waiting_time[smallest] = 0;
+			}
+		}
+		time++;
+		
+	}
+	
+	for(int k = 0; k < num_rows; k++)
+	{
+		cout << "Process: " << job[k][0] << endl;
+
+		start_time[k] = arrival_time[k];
+		cout << "Start Time: " << arrival_time[k] << endl;
+
+		cout << "Finish Time: " << finish_time[k] << endl;
+
+		tat[k] = burst_time[k] + waiting_time[k];
+		cout << "Turn around time: " << tat[k] << endl;
+
+		rt[k] = start_time[k] - arrival_time[k];
+		cout << "Response Time: " << rt[k] << endl;
+
+		cout << endl;
 	}
 }
 
