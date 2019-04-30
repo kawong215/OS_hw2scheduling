@@ -66,10 +66,7 @@ int main()
 
 void fifo(int job[][columns], int num_rows)
 {	
-	int start_time; 
-	int finish_time; 
-	int completion_time; 
-	int total_time; 
+	int start_time, finish_time, completion_time, total_time; 
 	float avg = 0;
 
 	completion_time = job[0][2];
@@ -100,15 +97,13 @@ void sjf(int job[][columns], int num_rows)
 {
 	int arrivals[num_rows];
 	int next = 0;
-	int next_count = 0; 
+	int next_count = 0;
 	int match = 1; 
 	int location[num_rows];
 
-	int time = 0; 
-	int count = 0; 
-	int index = 0;
-
-	int temp, min;
+	int count = 0;
+	int index = 0; // finding matches
+	int temp, min; // sorting
 
 	// find matching arrivals
 	for (int i = 0; i < num_rows; i++)
@@ -122,11 +117,10 @@ void sjf(int job[][columns], int num_rows)
 			match++; 
 			location[count] = job[i][0]; 
 			location[next_count] = job[next][0]; 
-			time = arrivals[i]; 
 			index = next; 
 			
 			// for checking purposes
-			cout << "matching arrivals for job ID " << job[i][0] << " and " << job[next][0] << " at time: " << time << endl;
+			cout << "matching arrivals for job ID " << job[i][0] << " and " << job[next][0] << " at time: " << arrivals[i] << endl;
 			count++; 
 		}
 	}
@@ -217,7 +211,115 @@ void sjf(int job[][columns], int num_rows)
 
 void bjf(int job[][columns], int num_rows)
 {
+	int arrivals[num_rows];
+	int next = 0;
+	int next_count = 0;
+	int match = 1; 
+	int location[num_rows];
 
+	int count = 0;
+	int index = 0; 
+	int temp, max; // for sorting
+
+	// find matching arrivals
+	for (int i = 0; i < num_rows; i++)
+	{
+		arrivals[i] = job[i][1];
+		next = i + 1;
+		next_count = count + 1; 
+		
+		if (arrivals[i] == job[next][1])
+		{
+			match++; 
+			location[count] = job[i][0]; 
+			location[next_count] = job[next][0]; 
+			index = next; 
+			
+			// for checking purposes
+			cout << "matching arrivals for job ID " << job[i][0] << " and " << job[next][0] << " at time: " << arrivals[i] << endl;
+			count++; 
+		}
+	}
+	
+	cout << endl; 
+	
+	// non-duplicated arrival jobs
+	int non_dupes = num_rows - match; 
+
+	// index where duplicated arrivals start
+	int duplicate_start = index - match + 1; 
+
+	// for checking purposes
+	cout << "Number of non-duplicates: " << non_dupes << endl;
+	cout << "Number of matches: " << match << endl;
+	cout << "Duplicate arrivals begin at row: " << duplicate_start << endl; 
+	cout << "Last index of match: " << index << endl;
+
+	// for checking purposes
+	cout << "Location of matches: " << endl;
+	for (int n = 0; n < match; n++)
+	{
+		cout << location[n] << " ";
+	}
+
+	int dupe_arrivals[match][columns]; // array to hold duplicate jobs at the same arrival
+
+	for (int m = 0; m < match; m++)
+	{
+		for (int n = 0; n < columns; n++)
+		{
+			dupe_arrivals[m][n] = job[duplicate_start + m][n]; 
+		}
+	}
+
+	cout << endl << "jobs with matching arrivals: " << endl; 
+	// print jobs with same arrival time
+	print_array(dupe_arrivals, match); 
+
+	// sort the jobs with the same arrival time
+	for (int i = 0; i < match; i++)
+	{
+		max = i;
+
+		for (int j = i + 1; j < match; j++)
+		{
+			if (dupe_arrivals[j][2] > dupe_arrivals[max][2])
+			{
+				max = j;
+			}
+		}
+		temp = dupe_arrivals[max][2];
+		dupe_arrivals[max][2] = dupe_arrivals[i][2];
+		dupe_arrivals[i][2] = temp;
+
+		temp = dupe_arrivals[max][0];
+		dupe_arrivals[max][0] = dupe_arrivals[i][0];
+		dupe_arrivals[i][0] = temp;
+
+		temp = dupe_arrivals[max][1];
+		dupe_arrivals[max][1] = dupe_arrivals[i][1];
+		dupe_arrivals[i][1] = temp;
+	}
+
+
+	// for checking purposes
+	cout << "After sorting duplicates, duplicate array: " << endl; 
+	print_array(dupe_arrivals, match); 
+
+	// for checking purposes
+	for (int m = 0; m < match; m++)
+	{
+		for (int n = 0; n < columns; n++)
+		{
+    			job[duplicate_start+m][n] = dupe_arrivals[m][n]; 
+		}
+	}
+
+	cout << endl << "Sorted jobs.dat file: " << endl; 
+	print_array(job, num_rows); 
+	cout << endl; 
+	
+	fifo(job, num_rows); 
 }
 
 void stcf(int job[][columns], int num_rows)
