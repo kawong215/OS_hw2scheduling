@@ -82,7 +82,7 @@ void fifo(int job[][columns], int num_rows)
 		cout << "JOB ID: " << job[i][0] << endl; 
 		cout << "Start time: " << start_time << " sec" << endl;
 		cout << "Finish time: " << finish_time << " sec" << endl;
-		cout << "Total time lapsed: " << job[0][2] << " sec" << endl; // turnaround time
+		cout << "Total time lapsed: " << job[0][2] << " sec" << endl; // duration
 		cout << "Response time: " << start_time - job[i][1] << " sec" << endl; // response = start - time arrived
 		cout << endl;
 
