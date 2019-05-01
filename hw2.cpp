@@ -315,8 +315,8 @@ void stcf(int job[][columns], int num_rows)
 	int time;
 	bool check = false;
 	int start_time[num_rows];
-	int tat[num_rows];
-	int rt[num_rows];
+	int elapse_time[num_rows];	//start to finish
+	int rt[num_rows];		//response time = start-finish
 	
 	for (int i = 0; i < num_rows; i++)
 	{
@@ -372,6 +372,8 @@ void stcf(int job[][columns], int num_rows)
 		
 	}
 	
+	cout << endl;
+	
 	for(int k = 0; k < num_rows; k++)
 	{
 		cout << "Process: " << job[k][0] << endl;
@@ -381,8 +383,8 @@ void stcf(int job[][columns], int num_rows)
 
 		cout << "Finish Time: " << finish_time[k] << endl;
 
-		tat[k] = burst_time[k] + waiting_time[k];
-		cout << "Turn around time: " << tat[k] << endl;
+		elapse_time[k] = finish_time[k] + start_time[k];
+		cout << "Total Time Elapsed: " << elapse_time[k] << endl;
 
 		rt[k] = start_time[k] - arrival_time[k];
 		cout << "Response Time: " << rt[k] << endl;
