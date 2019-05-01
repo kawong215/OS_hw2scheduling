@@ -350,11 +350,11 @@ void rr(int job[][columns], int num_rows)
 	int arrival[num_rows];
 	int burst[num_rows];
 	int remaining[num_rows];		//copies burst and subtracts from this
-	int completion;
-	int trt[num_rows];
+	int process = 0;
 	int quantum_time = 1;
-
-	int max_time = 0;
+	int time = 0;
+	int finish_time[num_rows];
+	int max_process = 0;
 
 	for(int i = 0; i < num_rows; i++)
 	{
@@ -362,10 +362,52 @@ void rr(int job[][columns], int num_rows)
 		burst[i] = job[i][2];
 		remaining[i] = burst[i];
 
-		max_time = max_time + burst[i];
+		max_process = max_process + burst[i];
 	}
-	cout << "Max Process: " << max_time << endl;
 
+	while (1)
+	{
+		bool completion = true;
+
+		for(int j = 0; j < num_rows; j++)
+		{	
+			if(remaining[j] > 0)
+			{
+				completion = false;
+
+				if(remaining[j] > quantum_time)
+				{
+					remaining[j] = remaining[j] - quantum_time;
+					time = time + quantum_time;
+				}
+
+				else 
+				{
+					time = time + remaining[j];
+					remaining[j] = 0;
+				}
+				
+			}
+			if (remaining[j] == 0)
+			{
+				finish_time[j] = time;
+			}
+		}
+		if(completion == true)
+		{
+			break;
+		}
+	}
+
+	for (int k = 0; k < num_rows; k++)
+	{
+		cout << endl;
+		cout << "Jod ID: " << job[k][0] << endl;
+		cout << "Start Time: " << arrival[k] << endl;
+		cout << "Finish Time: " << finish_time[k] << endl;
+		cout << "Total Time Elapsed: " << finish_time[k] - arrival[k] << endl;
+		cout << "Reponse Time: " << arrival[k] -  arrival[k] << endl; 
+	}
 }
 
 void algorithm_check(string choice, int job[][columns], int num_rows)
