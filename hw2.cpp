@@ -395,6 +395,24 @@ void stcf(int job[][columns], int num_rows)
 
 void rr(int job[][columns], int num_rows)
 {
+	int arrival[num_rows];
+	int burst[num_rows];
+	int remaining[num_rows];		//copies burst and subtracts from this
+	int completion;
+	int trt[num_rows];
+	int quantum_time = 1;
+
+	int max_time = 0;
+
+	for(int i = 0; i < num_rows; i++)
+	{
+		arrival[i] = job[i][1];
+		burst[i] = job[i][2];
+		remaining[i] = burst[i];
+
+		max_time = max_time + burst[i];
+	}
+	cout << "Max Process: " << max_time << endl;
 
 }
 
