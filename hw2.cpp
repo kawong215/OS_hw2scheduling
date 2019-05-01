@@ -328,7 +328,7 @@ void stcf(int job[][columns], int num_rows)
 	
 	for(int k = 0; k < num_rows; k++)
 	{
-		cout << "Process: " << job[k][0] << endl;
+		cout << "Job ID: " << job[k][0] << endl;
 
 		start_time[k] = arrival_time[k];
 		cout << "Start Time: " << arrival_time[k] << endl;
